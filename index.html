@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Etch-a-Sketch</title>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: sans-serif;
+            background-color: #ddd;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        #frame {
+            width: 500px;
+            height: 500px;
+            background-color: #fff;            
+            border: 45px solid red;
+            border-radius: 30px;
+            display: grid;
+            grid-template-columns: repeat(16, 1fr);
+        }
+
+        #menu {
+            width: 200px;
+            height: 300px;
+            background-color: #fff;
+            border: 45px solid red;
+            border-radius: 30px;
+            align-self: center;            
+        }
+
+        #content {
+            display: flex;
+            justify-content: space-evenly;
+        }
+
+        #blackButton {
+            background-color: black;
+            color: white;
+            font-size: 40px;
+            border: none;
+            font-family: sans-serif;
+        }
+
+        #blackButton:hover, #colourButton:hover {
+            border: 2px solid white;
+        }
+
+        #blackButton:focus, #colourButton:focus {
+            outline: none;
+            box-shadow: none;
+        }
+
+        #colourButton {
+            border: none;
+            font-size: 40px;
+            font-family: sans-serif;
+            background: linear-gradient(90deg, #F00, #FF0, #0F0, #0FF, #00F, #F0F);
+            color: black;
+        }
+
+        .pixel {
+            border: 1px solid #dddddd;
+        }
+
+        .button {
+            display: block;
+            width: 100%;
+            height: 50%;   
+            font-weight: bold;         
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Etch-A-Sketch</h1>
+    <div id="content">
+        <div id="menu">
+            <button id="blackButton" class="button">Black</button>
+            <button id="colourButton" class="button">Colour</button>
+        </div>
+        <div id="frame"></div>
+    </div>
+
+    <script>
+        //Default number of rows
+        let rowCount = 16;        
+
+        //Constants to DOM elements
+        const drawFrame = document.getElementById("frame");
+        const blackButton = document.getElementById("blackButton");
+        const colourButton = document.getElementById("colourButton");
+
+        //Add event listeners to buttons
+        blackButton.addEventListener("click", resetGrid);
+        colourButton.addEventListener("click", resetGrid);
+
+        //Build default grind on page load
+        window.onload = build(highlight);
+
+        //Builds grid
+        function build(highlightSelect) {
+            let pixels = rowCount ** 2;
+            drawFrame.style.gridTemplateColumns = "repeat(" + rowCount + ", 1fr)";
+            for (let i = 0; i < pixels; i++) {
+                const div = document.createElement('div');
+                //div.classList = "pixel";
+                div.addEventListener('mouseover', highlightSelect);
+                drawFrame.appendChild(div);
+            }
+        }        
+
+        function resetGrid(e) {
+            let rowChoice = prompt("How many squares per side? (MAX 64)");
+            if (rowChoice == null) {
+                return;
+            } else if (rowChoice > 64) {
+                rowCount = 64;
+            } else if (rowChoice < 1 || isNaN(rowChoice)) {
+                rowCount = 16;
+            } else {
+                rowCount = rowChoice;
+            }
+            drawFrame.innerHTML = "";
+            if (e.target.id == "blackButton") {
+                build(highlight);
+            } else if (e.target.id == "colourButton") {
+                build(highlightColor);
+            }
+        }
+        
+        //Sets grid boxes to black if selected
+        function highlight(e) {
+            e.target.style.backgroundColor = "black";
+        }
+
+        //Sets grid boxes to random rgb values if selected
+        function highlightColor(e) {
+            if (e.target.style.backgroundColor === "") {
+                let red = Math.floor(Math.random() * 256);
+                let green = Math.floor(Math.random() * 256);
+                let blue = Math.floor(Math.random() * 256);
+                e.target.style.backgroundColor = "rgb(" + red + ", " + green + ", " + blue + ")";
+            } 
+        }
+    </script>
+</body>
+
+</html>
