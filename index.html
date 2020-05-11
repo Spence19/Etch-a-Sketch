@@ -141,9 +141,9 @@
         //Sets grid boxes to random rgb values if selected
         function highlightColor(e) {
             if (e.target.style.backgroundColor === "") {
-                let red = Math.floor(Math.random() * 256);
-                let green = Math.floor(Math.random() * 256);
-                let blue = Math.floor(Math.random() * 256);
+                let red = Math.floor(Math.random() * 255);
+                let green = Math.floor(Math.random() * 255);
+                let blue = Math.floor(Math.random() * 255);
                 e.target.style.backgroundColor = "rgb(" + red + ", " + green + ", " + blue + ")";
             } 
         }
